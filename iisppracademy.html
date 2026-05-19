@@ -24,6 +24,8 @@
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
+/* Fixed header = 44px banner + 64px nav = 108px */
+section[id], div[id] { scroll-margin-top: 108px; }
 body {
   background: var(--cream);
   color: var(--ink);
@@ -695,6 +697,1138 @@ nav { animation: navSlide 0.5s cubic-bezier(.22,1,.36,1) both; }
   footer { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; gap: 2rem; }
   .footer-bottom { flex-direction: column; gap: 0.5rem; padding: 1rem 1.5rem; }
 }
+
+/* ═══════════════════════════════════════
+   COOL 3D — additive only, nothing overridden
+   ═══════════════════════════════════════ */
+
+/* Hero card: angled resting pose */
+.hero-card-wrap { position:relative; }
+.course-card {
+  transform: perspective(1000px) rotateY(-12deg) rotateX(6deg) translateZ(0);
+  transform-style: preserve-3d;
+  will-change: transform;
+  box-shadow:
+    -28px 36px 90px rgba(15,76,76,.24),
+    -8px 12px 28px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.5);
+}
+/* ground shadow blob under card */
+.hero-card-wrap::after {
+  content:'';
+  position:absolute; bottom:-32px; left:8%; right:8%; height:48px;
+  background: radial-gradient(ellipse, rgba(15,76,76,.28) 0%, transparent 70%);
+  filter: blur(18px);
+  pointer-events:none;
+  transition: opacity .5s, transform .5s;
+}
+
+/* Why cards — perspective container */
+.why-us-grid { perspective:1400px; }
+.why-card { transform-style:preserve-3d; will-change:transform; }
+.why-card-icon { display:flex; transition: transform .35s cubic-bezier(.22,1,.36,1) !important; }
+
+/* Benefit cards */
+.benefits-grid { perspective:1200px; }
+.benefit-card { transform-style:preserve-3d; will-change:transform; }
+.benefit-icon-wrap { transition: transform .35s cubic-bezier(.22,1,.36,1) !important; }
+
+/* Testi cards */
+.testi-grid { perspective:1000px; }
+.testi-card { transform-style:preserve-3d; will-change:transform; }
+
+/* Certificate mock */
+.cert-mock {
+  transform-style:preserve-3d;
+  transition: transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s !important;
+}
+.cert-mock:hover {
+  transform: perspective(900px) rotateY(-8deg) rotateX(5deg) translateZ(20px) !important;
+  box-shadow: 30px 50px 120px rgba(0,0,0,.42) !important;
+}
+
+/* Countdown tiles — embossed depth */
+.hcd-num {
+  box-shadow:
+    0 4px 14px rgba(15,76,76,.14),
+    inset 0 1px 0 rgba(255,255,255,.75),
+    inset 0 -2px 0 rgba(15,76,76,.12);
+}
+.hcd-num.tick {
+  transform: scale(1.15) translateY(-2px) !important;
+}
+
+/* CTA buttons — raised with floor shadow */
+.btn-main {
+  box-shadow:
+    0 4px 20px rgba(212,130,26,.38),
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 3px 0 #925210 !important;
+  transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s !important;
+}
+.btn-main:hover {
+  transform: translateY(-4px) !important;
+  box-shadow:
+    0 18px 44px rgba(212,130,26,.46),
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 3px 0 #925210 !important;
+}
+
+/* Proof items hover lift */
+.proof-item { transition: transform .3s cubic-bezier(.22,1,.36,1); }
+.proof-item:hover { transform: translateY(-5px) scale(1.06); }
+
+/* ═══════════════════════════════════════ */
+
+/* ──────────────────────────────────────
+   EXTRA COOL 3D LAYER
+   ────────────────────────────────────── */
+
+/* Particle canvas behind hero */
+#hero-canvas {
+  position:absolute; inset:0;
+  pointer-events:none; z-index:0;
+  opacity:.55;
+}
+/* hero already has position:relative — don't redeclare */
+/* only lift direct grid children above canvas — use z-index without position:relative to avoid layout shift */
+.hero > div { isolation: isolate; }
+
+/* Cursor spotlight */
+#spotlight {
+  position:fixed; pointer-events:none; z-index:9999;
+  width:380px; height:380px;
+  border-radius:50%;
+  background: radial-gradient(circle, rgba(26,107,107,.10) 0%, transparent 65%);
+  transform: translate(-50%,-50%);
+  transition: opacity .4s;
+  mix-blend-mode: screen;
+}
+
+/* 3D text depth — hero H1 */
+.hero-h1 {
+  text-shadow:
+    1px 1px 0 rgba(15,76,76,.08),
+    2px 2px 0 rgba(15,76,76,.06),
+    3px 3px 0 rgba(15,76,76,.04),
+    0 8px 24px rgba(15,76,76,.08);
+}
+.hero-h1 em {
+  text-shadow:
+    1px 1px 0 rgba(15,76,76,.15),
+    2px 2px 0 rgba(15,76,76,.10),
+    3px 3px 0 rgba(15,76,76,.06),
+    0 10px 30px rgba(15,76,76,.18);
+}
+.hero-h1 .amber {
+  text-shadow:
+    1px 1px 0 rgba(160,80,0,.2),
+    2px 2px 0 rgba(160,80,0,.12),
+    3px 3px 0 rgba(160,80,0,.07),
+    0 10px 30px rgba(212,130,26,.25);
+}
+
+
+
+/* Ripple on buttons */
+.btn-main, .card-enroll-btn, .btn-amber, .nav-enroll {
+  overflow:hidden; position:relative;
+}
+.ripple-wave {
+  position:absolute;
+  border-radius:50%;
+  background: rgba(255,255,255,.35);
+  transform: scale(0);
+  animation: rippleAnim .55s linear forwards;
+  pointer-events:none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* Glowing border on why-cards on hover */
+.why-card:hover {
+  border-color: rgba(245,166,35,.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(245,166,35,.25),
+    0 24px 60px rgba(0,0,0,.32),
+    0 0 30px rgba(245,166,35,.08) inset !important;
+}
+
+/* Glowing border on benefit-cards */
+.benefit-card:hover {
+  border-color: var(--teal) !important;
+  box-shadow:
+    0 0 0 1px rgba(15,76,76,.15),
+    0 20px 50px rgba(15,76,76,.13),
+    0 0 20px rgba(15,76,76,.04) inset !important;
+}
+
+/* Proof bar: glow pulse on number */
+.proof-num {
+  display:inline-block;
+  transition: text-shadow .3s, transform .3s;
+}
+.proof-item:hover .proof-num {
+  text-shadow: 0 0 20px rgba(245,166,35,.8), 0 0 40px rgba(245,166,35,.4);
+  transform: scale(1.12);
+}
+
+/* Why-us grid: stagger 3d depth entrance */
+.why-card.revealed {
+  animation: cardRise .6s cubic-bezier(.22,1,.36,1) both !important;
+}
+@keyframes cardRise {
+  from { opacity:0; transform: perspective(600px) rotateX(18deg) translateY(32px) scale(.95); }
+  to   { opacity:1; transform: perspective(600px) rotateX(0deg)  translateY(0)     scale(1);  }
+}
+
+/* Benefit cards same */
+.benefit-card.revealed {
+  animation: cardRise .6s cubic-bezier(.22,1,.36,1) both !important;
+}
+
+/* Certificate section: tilted entry */
+.cert-mock {
+  animation: certEntry 1s 1.2s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes certEntry {
+  from { opacity:0; transform: perspective(900px) rotateY(30deg) rotateX(-10deg) scale(.88); }
+  to   { opacity:1; transform: perspective(900px) rotateY(0deg)  rotateX(0deg)   scale(1);  }
+}
+
+/* Testi-card avatar glow on hover */
+.testi-card:hover .testi-avatar {
+  box-shadow: 0 0 0 3px rgba(245,166,35,.5), 0 0 20px rgba(245,166,35,.25);
+  transform: scale(1.1);
+  transition: transform .3s, box-shadow .3s;
+}
+
+/* Nav logo 3D cube */
+.nav-logo-icon {
+  transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s;
+}
+.nav-logo-icon:hover {
+  transform: perspective(200px) rotateY(-25deg) rotateX(12deg) translateZ(4px);
+  box-shadow: 6px 8px 18px rgba(15,76,76,.35);
+}
+
+/* Countdown banner num glow */
+.countdown-num { transition: text-shadow .2s, color .2s; }
+.countdown-num.flip {
+  text-shadow: 0 0 12px rgba(245,166,35,.9), 0 0 24px rgba(245,166,35,.5) !important;
+}
+
+/* FAQ item 3D open */
+.faq-item { transition: border-color .3s, box-shadow .35s, transform .35s; }
+.faq-item.open {
+  box-shadow: 0 8px 32px rgba(15,76,76,.10);
+  transform: scale(1.005);
+  border-color: var(--teal) !important;
+}
+
+/* ── END EXTRA COOL ── */
+
+/* ════════════════════════════════════════════
+   SITE-WIDE COOL ANIMATIONS v2
+   ════════════════════════════════════════════ */
+
+/* — AURORA background on why-us section — */
+.why-us {
+  background: linear-gradient(160deg, #0a3535 0%, var(--teal) 60%, #0f5555 100%);
+  position: relative;
+  overflow: hidden;
+}
+.why-us::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 30%, rgba(245,166,35,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 80% 70%, rgba(26,200,180,.06) 0%, transparent 60%);
+  animation: auroraShift 12s ease-in-out infinite alternate;
+}
+.why-us-inner { position: relative; z-index: 1; }
+@keyframes auroraShift {
+  0%   { transform: scale(1)    translate(0,0); }
+  50%  { transform: scale(1.06) translate(20px,-10px); }
+  100% { transform: scale(.97)  translate(-15px,12px); }
+}
+
+/* — SHIMMER SWEEP on proof bar — */
+.proof-bar { position: relative; overflow: hidden; }
+.proof-bar::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.06) 50%, transparent 65%);
+  background-size: 300% 100%;
+  animation: barSweep 4s ease-in-out infinite;
+}
+@keyframes barSweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* — GLOWING BOTTOM BORDER on nav — */
+nav::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(15,76,76,.35), rgba(212,130,26,.4), rgba(15,76,76,.35), transparent);
+  background-size: 200% 100%;
+  animation: navGlow 4s linear infinite;
+}
+@keyframes navGlow {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* — GRADIENT TEXT SHIMMER on hero H1 em — */
+.hero-h1 em {
+  background: linear-gradient(90deg, var(--teal), #1d9090, var(--teal-mid), var(--teal));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 5s ease-in-out infinite;
+}
+@keyframes textShimmer {
+  0%,100% { background-position: 0% 0; }
+  50%      { background-position: 100% 0; }
+}
+
+/* — AMBER SHIMMER on price — */
+.card-price {
+  background: linear-gradient(90deg, var(--amber-br), #ffcc55, var(--amber-br));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 3s ease-in-out infinite;
+}
+
+/* — ANIMATED GRADIENT on card-enroll-btn — */
+.card-enroll-btn {
+  background: linear-gradient(90deg, var(--amber) 0%, #e8960a 50%, var(--amber) 100%) !important;
+  background-size: 200% 100% !important;
+  animation: btnFlow 2.8s linear infinite !important;
+}
+@keyframes btnFlow {
+  0%   { background-position: 0%   0; }
+  100% { background-position: 200% 0; }
+}
+
+/* — FLOATING DOTS on certificate section — */
+.certificate-section { position: relative; overflow: hidden; }
+.cert-dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: rgba(245,166,35,.18);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  from { transform: translateY(0) rotate(0deg); opacity: .6; }
+  to   { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+/* — PULSING RING on check icons — */
+.check-icon {
+  position: relative;
+}
+.check-icon::after {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(45,122,79,.4);
+  animation: checkRing 2s ease-out infinite;
+}
+@keyframes checkRing {
+  0%   { transform: scale(1);   opacity: .7; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* — GLOWING CARD PRICE BLOCK — */
+.course-card-top {
+  position: relative; overflow: hidden;
+}
+.course-card-top::after {
+  content: '';
+  position: absolute; top: -60%; left: -60%;
+  width: 80%; height: 200%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.07), transparent);
+  animation: cardTopSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes cardTopSweep {
+  0%,100% { transform: translateX(-60%) skewX(-12deg); opacity: 0; }
+  40%,60% { opacity: 1; }
+  80%     { transform: translateX(220%) skewX(-12deg); opacity: 0; }
+}
+
+/* — SCROLL PROGRESS BAR — */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 9998;
+  height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--teal), var(--amber-br));
+  transition: width .1s linear;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(212,130,26,.6);
+}
+
+/* — TESTI CARD quote mark — */
+.testi-card {
+  position: relative;
+  overflow: hidden;
+}
+.testi-card::before {
+  content: '"';
+  position: absolute; top: -10px; right: 16px;
+  font-family: 'Lora', serif;
+  font-size: 7rem; line-height: 1;
+  color: rgba(15,76,76,.06);
+  pointer-events: none;
+  transition: color .4s, transform .4s;
+}
+.testi-card:hover::before {
+  color: rgba(15,76,76,.12);
+  transform: scale(1.1) rotate(-5deg);
+}
+
+/* — WEEK ITEM left bar animation — */
+.week-item { position: relative; }
+.week-item::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; border-radius: 3px 0 0 3px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
+}
+.week-item:hover::before,
+.week-item.open::before { transform: scaleY(1); }
+
+/* — BANNER DOT ping — */
+.banner-dot {
+  position: relative;
+}
+.banner-dot::after {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  background: var(--amber-br);
+  animation: dotPing 1.6s ease-out infinite;
+}
+@keyframes dotPing {
+  0%   { transform: scale(1);   opacity: .6; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+/* — FOOTER gradient top border — */
+footer {
+  position: relative;
+}
+footer::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal-mid), var(--amber-br), var(--teal-mid));
+  background-size: 200% 100%;
+  animation: navGlow 5s linear infinite;
+}
+
+/* — PROOF ICON spin-on-hover — */
+.proof-icon {
+  display: inline-block;
+  transition: transform .5s cubic-bezier(.22,1,.36,1);
+}
+.proof-item:hover .proof-icon {
+  transform: rotateY(360deg) scale(1.2);
+}
+
+/* — HERO TAG underline grow — */
+.hero-tag {
+  position: relative;
+  overflow: hidden;
+}
+.hero-tag::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  height: 1px; width: 100%;
+  background: rgba(15,76,76,.25);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: tagLine 1s 1.2s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes tagLine {
+  to { transform: scaleX(1); }
+}
+
+/* — WHY-VS rows glow on hover — */
+.why-vs-cell.us-val {
+  transition: color .25s, text-shadow .25s;
+}
+.why-vs-row:hover .why-vs-cell.us-val {
+  text-shadow: 0 0 12px rgba(245,166,35,.6);
+}
+
+/* — FINAL CTA section background pulse — */
+.final-cta {
+  background-size: 200% 200% !important;
+  animation: ctaBgPulse 8s ease-in-out infinite;
+}
+@keyframes ctaBgPulse {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* ════════════════════════════════════════════ */
+
+/* ╔══════════════════════════════════════════╗
+   ║   COOL ANIMATIONS v3 — ENTIRE SITE      ║
+   ╚══════════════════════════════════════════╝ */
+
+/* ── CUSTOM CURSOR ── */
+*, *::before, *::after { cursor: none !important; }
+#cursor-dot {
+  position: fixed; z-index: 99999; pointer-events: none;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--amber-br);
+  transform: translate(-50%,-50%);
+  transition: width .15s, height .15s, background .2s;
+  mix-blend-mode: multiply;
+}
+#cursor-ring {
+  position: fixed; z-index: 99998; pointer-events: none;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid rgba(15,76,76,.5);
+  transform: translate(-50%,-50%);
+  transition: width .35s cubic-bezier(.22,1,.36,1),
+              height .35s cubic-bezier(.22,1,.36,1),
+              border-color .25s, opacity .25s;
+}
+body:has(a:hover) #cursor-dot  { width:14px; height:14px; background: var(--teal); }
+body:has(a:hover) #cursor-ring { width:52px; height:52px; border-color: rgba(212,130,26,.6); }
+body:has(.btn-main:hover) #cursor-dot  { width:18px; height:18px; background: var(--amber); }
+body:has(.btn-main:hover) #cursor-ring { width:64px; height:64px; border-color: rgba(212,130,26,.8); }
+
+/* ── HERO: animated gradient mesh background ── */
+.hero {
+  background: linear-gradient(160deg, var(--cream) 0%, var(--teal-lite) 60%, #d0eded 100%) !important;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 75% 55%, rgba(26,107,107,.09) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 60% at 15% 25%, rgba(212,130,26,.06) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 40% at 85% 10%, rgba(26,107,107,.05) 0%, transparent 50%);
+  animation: meshDrift 18s ease-in-out infinite alternate;
+}
+@keyframes meshDrift {
+  0%   { transform: scale(1)    translate(0,0); }
+  33%  { transform: scale(1.04) translate(12px,-8px); }
+  66%  { transform: scale(.98)  translate(-8px,10px); }
+  100% { transform: scale(1.02) translate(6px,-4px); }
+}
+
+/* ── HERO CARD: glow pulse on card-badge ── */
+.card-badge {
+  animation: badgePop 3s ease-in-out infinite;
+}
+@keyframes badgePop {
+  0%,100% { box-shadow: 0 4px 12px rgba(245,166,35,.4); }
+  50%     { box-shadow: 0 4px 24px rgba(245,166,35,.85), 0 0 0 4px rgba(245,166,35,.15); }
+}
+
+/* ── HERO COUNTDOWN: glass morphism pulse ── */
+.hero-countdown {
+  animation: glassPulse 4s ease-in-out infinite;
+}
+@keyframes glassPulse {
+  0%,100% { box-shadow: 0 0 0 1px rgba(15,76,76,.16), 0 4px 24px rgba(15,76,76,.04); }
+  50%     { box-shadow: 0 0 0 1px rgba(15,76,76,.28), 0 8px 32px rgba(15,76,76,.10); }
+}
+
+/* ── BTN-OUTLINE: animated border draw ── */
+.btn-outline {
+  position: relative; overflow: hidden;
+}
+.btn-outline::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--teal), var(--amber-br), var(--teal));
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity .3s;
+  z-index: -1;
+}
+.btn-outline:hover::before { opacity: .12; animation: borderFlow .8s linear infinite; }
+@keyframes borderFlow {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── PROOF BAR: individual item entrance ── */
+.proof-item {
+  position: relative;
+}
+.proof-item::after {
+  content: '';
+  position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 2px; border-radius: 2px;
+  background: var(--amber-br);
+  transition: width .35s cubic-bezier(.22,1,.36,1);
+}
+.proof-item:hover::after { width: 80%; }
+
+/* ── WHY-CARD: animated icon background ── */
+.why-card-icon {
+  position: relative; overflow: hidden;
+}
+.why-card-icon::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(245,166,35,.25), transparent 70%);
+  opacity: 0;
+  transition: opacity .35s;
+}
+.why-card:hover .why-card-icon::after { opacity: 1; }
+
+/* ── WHY CARD: number counter badge ── */
+.why-card { counter-increment: why-count; }
+.why-us-grid { counter-reset: why-count; }
+
+/* ── CURRICULUM: week progress bar ── */
+.week-header {
+  position: relative;
+  overflow: hidden;
+}
+.week-header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  height: 1px; width: 0%;
+  background: linear-gradient(90deg, var(--teal), var(--amber-br));
+  transition: width .5s cubic-bezier(.22,1,.36,1);
+}
+.week-item.open .week-header::after,
+.week-item:hover .week-header::after { width: 100%; }
+
+/* ── CURRICULUM CTA CARD: shimmer ── */
+.curriculum-cta-card {
+  position: relative; overflow: hidden;
+}
+.curriculum-cta-card::after {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.07), transparent);
+  animation: ctaSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes ctaSweep {
+  0%,100% { left: -100%; opacity: 0; }
+  40%     { opacity: 1; }
+  80%     { left: 160%; opacity: 0; }
+}
+
+/* ── CERTIFICATE: border shimmer ── */
+.cert-mock-border {
+  animation: borderTrace 4s linear infinite;
+  background: linear-gradient(90deg, var(--amber-br), transparent, var(--amber-br)) !important;
+  background-size: 300% 100% !important;
+}
+@keyframes borderTrace {
+  0%   { background-position: 0% 0; opacity: .4; }
+  50%  { background-position: 100% 0; opacity: .8; }
+  100% { background-position: 200% 0; opacity: .4; }
+}
+
+/* ── CERT STAMP: continuous slow spin ── */
+.cert-stamp {
+  animation: stampSpin 1s 1.5s cubic-bezier(.22,1,.36,1) both, stampFloat 6s 2.5s ease-in-out infinite !important;
+}
+@keyframes stampFloat {
+  0%,100% { transform: rotate(0deg) scale(1); }
+  33%     { transform: rotate(3deg) scale(1.04); }
+  66%     { transform: rotate(-2deg) scale(.97); }
+}
+
+/* ── FAQ: question hover glow ── */
+.faq-q {
+  transition: color .25s, background .25s;
+  border-radius: 8px;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+.faq-q:hover { background: rgba(15,76,76,.03); }
+.faq-item.open .faq-q { color: var(--teal); }
+
+/* ── FAQ TOGGLE: morph + glow ── */
+.faq-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(15,76,76,.06);
+  transition: background .3s, box-shadow .3s, transform .3s;
+  flex-shrink: 0;
+}
+.faq-item.open .faq-toggle {
+  background: var(--teal);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(15,76,76,.15), 0 0 16px rgba(15,76,76,.25);
+}
+
+/* ── FINAL CTA: floating ring ── */
+.final-cta {
+  position: relative; overflow: hidden;
+}
+.final-cta::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,130,26,.12);
+  transform: translate(-50%,-50%) scale(.5);
+  animation: ringExpand 5s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes ringExpand {
+  0%   { transform: translate(-50%,-50%) scale(.3); opacity: .8; }
+  100% { transform: translate(-50%,-50%) scale(1.4); opacity: 0; }
+}
+/* second ring staggered */
+.final-cta .reveal::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,130,26,.10);
+  transform: translate(-50%,-50%) scale(.3);
+  animation: ringExpand 5s 2.5s ease-out infinite;
+  pointer-events: none;
+}
+
+/* ── URGENCY DOT: triple ping ── */
+.urgency-dot {
+  position: relative;
+}
+.urgency-dot::before,
+.urgency-dot::after {
+  content: '';
+  position: absolute; inset: -5px;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: triplePing 2s ease-out infinite;
+}
+.urgency-dot::after { animation-delay: .7s; }
+@keyframes triplePing {
+  0%   { transform: scale(1); opacity: .6; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* ── TESTI-CARD: shimmer on hover ── */
+.testi-card::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(135deg, transparent 40%, rgba(15,76,76,.03) 50%, transparent 60%);
+  background-size: 300% 300%;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.testi-card:hover::after { opacity: 1; animation: testiShimmer 1.5s linear infinite; }
+@keyframes testiShimmer {
+  0%   { background-position: 200% 200%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* ── WHO-ITEM: left accent grow ── */
+.who-item {
+  position: relative;
+}
+.who-item::before {
+  content: '';
+  position: absolute; left: 0; top: 20%; bottom: 20%;
+  width: 3px; border-radius: 3px;
+  background: linear-gradient(180deg, var(--amber-br), var(--teal));
+  transform: scaleY(0);
+  transition: transform .4s cubic-bezier(.22,1,.36,1);
+}
+.who-item:hover::before { transform: scaleY(1); }
+
+/* ── QUICK FACTS: value color shift ── */
+.fact-val {
+  transition: color .3s;
+}
+.fact-row:hover .fact-val { color: var(--teal); }
+
+/* ── SECTION EYEBROW: glitch-style flicker ── */
+.section-eyebrow, .why-us-eyebrow {
+  position: relative;
+  display: inline-block;
+}
+.section-eyebrow::after, .why-us-eyebrow::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 0;
+  color: var(--amber-br);
+  clip-path: inset(40% 0 40% 0);
+  animation: eyebrowGlitch 6s ease-in-out infinite;
+}
+@keyframes eyebrowGlitch {
+  0%,90%,100% { clip-path: inset(40% 0 40% 0); transform: none; opacity: 0; }
+  92%          { clip-path: inset(10% 0 70% 0); transform: translateX(3px); opacity: 1; }
+  94%          { clip-path: inset(60% 0 10% 0); transform: translateX(-3px); opacity: 1; }
+  96%          { clip-path: inset(30% 0 50% 0); transform: translateX(2px); opacity: 1; }
+  98%          { clip-path: inset(70% 0 5%  0); transform: translateX(-2px); opacity: 1; }
+}
+
+/* ── HERO TRUST ROW: slide in stagger ── */
+.hero-trust span {
+  display: inline-block;
+  opacity: 0;
+  animation: trustIn .5s cubic-bezier(.22,1,.36,1) forwards;
+}
+.hero-trust span:nth-child(1) { animation-delay: 1.1s; }
+.hero-trust span:nth-child(2) { animation-delay: 1.25s; }
+.hero-trust span:nth-child(3) { animation-delay: 1.4s; }
+.hero-trust span:nth-child(4) { animation-delay: 1.55s; }
+.hero-trust span:nth-child(5) { animation-delay: 1.7s; }
+@keyframes trustIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── FOOTER BRAND: glow on hover ── */
+.footer-brand-name {
+  transition: text-shadow .3s;
+  display: inline-block;
+}
+.footer-brand-name:hover {
+  text-shadow: 0 0 20px rgba(255,255,255,.5), 0 0 40px rgba(245,166,35,.2);
+}
+
+/* ╚══════════════════════════════════════════╝ */
+
+/* ═══════════════════════════════════════════
+   DEPTH LAYER — real light, no theatre
+   ═══════════════════════════════════════════
+
+   Philosophy: 3D should feel like materials exist
+   in space. Not wireframes, not glowing orbs.
+   Think: paper lifted off a surface, glass
+   catching ambient light, ink pressed into grain.
+   ═══════════════════════════════════════════ */
+
+/* ── HERO CARD: angled like a physical object under a lamp ── */
+.hero-card-wrap {
+  position: relative;
+}
+.course-card {
+  transform: none;
+  transform-style: flat;
+  will-change: transform, box-shadow;
+  box-shadow:
+    0 24px 60px rgba(15,76,76,.18),
+    0 6px 18px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.65) !important;
+  transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s !important;
+  animation: cardSlideIn 0.9s 0.4s cubic-bezier(.22,1,.36,1) both !important;
+}
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.hero-card-wrap:hover .course-card {
+  transform: translateY(-6px) !important;
+  box-shadow:
+    0 36px 80px rgba(15,76,76,.22),
+    0 10px 28px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.7) !important;
+}
+.hero-card-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: 8%; right: 8%; height: 32px;
+  background: radial-gradient(ellipse, rgba(15,76,76,.16) 0%, transparent 72%);
+  filter: blur(12px);
+  pointer-events: none;
+  transition: opacity .4s;
+}
+.hero-card-wrap:hover::after { opacity: 0.65; }
+
+/* ── CARD TOP SURFACE: material sheen that reacts to angle ── */
+.course-card-top {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-mid) 100%);
+  position: relative;
+}
+/* Subtle highlight that shifts with card tilt — CSS only */
+.course-card-top::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(125deg,
+    rgba(255,255,255,.10) 0%,
+    rgba(255,255,255,.02) 40%,
+    transparent 70%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ── PROOF BAR: recessed into the page ── */
+.proof-bar {
+  box-shadow:
+    inset 0 4px 14px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(0,0,0,.12),
+    0 -1px 0 rgba(0,0,0,.08) !important;
+  transform: perspective(1600px) rotateX(1.2deg);
+  transform-origin: top;
+}
+.proof-item {
+  transition: transform .32s cubic-bezier(.22,1,.36,1);
+  will-change: transform;
+}
+.proof-item:hover {
+  transform: translateY(-6px) scale(1.06) !important;
+}
+
+/* ── WHY CARDS: thick paper lifted off a surface ── */
+.why-us-grid { perspective: 1600px; perspective-origin: 50% 60%; }
+.why-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  border-bottom: 3px solid rgba(0,0,0,.22);
+}
+.why-card::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(145deg,
+    rgba(255,255,255,.06) 0%,
+    transparent 45%);
+  pointer-events: none;
+}
+.why-card:hover {
+  transform: translateY(-10px) perspective(800px) rotateX(-3deg) !important;
+  border-bottom-color: rgba(0,0,0,.30) !important;
+  box-shadow:
+    0 28px 60px rgba(0,0,0,.38),
+    0 8px 20px rgba(0,0,0,.18),
+    0 0 0 1px rgba(245,166,35,.30) !important;
+}
+
+/* ── BENEFIT CARDS: cream stock paper with press depth ── */
+.benefits-grid { perspective: 1400px; }
+.benefit-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  border-bottom: 2px solid rgba(0,0,0,.06);
+}
+.benefit-card::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,.55) 0%,
+    transparent 50%);
+  pointer-events: none;
+}
+.benefit-card:hover {
+  transform: translateY(-8px) perspective(700px) rotateX(-2deg) !important;
+  border-bottom-color: rgba(15,76,76,.10) !important;
+  box-shadow:
+    0 22px 55px rgba(15,76,76,.14),
+    0 6px 16px rgba(0,0,0,.06),
+    0 0 0 1px rgba(15,76,76,.12) !important;
+}
+
+/* ── TESTIMONIAL CARDS: original animation restored ── */
+.testi-card {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow .35s cubic-bezier(.22,1,.36,1), transform .35s cubic-bezier(.22,1,.36,1);
+}
+.testi-card:hover {
+  box-shadow: 0 20px 60px rgba(15,76,76,0.13) !important;
+  transform: translateY(-6px) !important;
+}
+.testi-card::before {
+  content: '\201C';
+  position: absolute; top: -10px; right: 16px;
+  font-family: 'Lora', serif;
+  font-size: 7rem; line-height: 1;
+  color: rgba(15,76,76,.06);
+  pointer-events: none;
+  transition: color .4s, transform .4s;
+}
+.testi-card:hover::before {
+  color: rgba(15,76,76,.12);
+  transform: scale(1.1) rotate(-5deg);
+}
+.testi-card::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(135deg, transparent 40%, rgba(15,76,76,.03) 50%, transparent 60%);
+  background-size: 300% 300%;
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+.testi-card:hover::after { opacity: 1; animation: testiShimmer 1.5s linear infinite; }
+@keyframes testiShimmer {
+  0%   { background-position: 200% 200%; }
+  100% { background-position: 0% 0%; }
+}
+.testi-card:hover .testi-avatar {
+  box-shadow: 0 0 0 3px rgba(245,166,35,.5), 0 0 20px rgba(245,166,35,.25);
+  transform: scale(1.1);
+  transition: transform .3s, box-shadow .3s;
+}
+
+/* ── CERTIFICATE: heavy paper under directional light ── */
+.cert-mock {
+  transform: none;
+  transform-origin: center;
+  will-change: transform, box-shadow;
+  box-shadow:
+    0 32px 80px rgba(0,0,0,.32),
+    0 8px 24px rgba(0,0,0,.14),
+    inset 0 1px 0 rgba(255,255,255,.9) !important;
+  transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s !important;
+  animation: certSlideIn 1s 1.2s cubic-bezier(.22,1,.36,1) both !important;
+}
+@keyframes certSlideIn {
+  from { opacity: 0; transform: translateX(50px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.cert-mock:hover {
+  transform: translateY(-8px) !important;
+  box-shadow:
+    0 48px 110px rgba(0,0,0,.40),
+    0 14px 36px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+
+/* ── COUNTDOWN TILES: solid embossed keys ── */
+.hcd-num {
+  box-shadow:
+    0 3px 10px rgba(15,76,76,.14),
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 -2px 0 rgba(15,76,76,.14),
+    inset 1px 0 0 rgba(255,255,255,.5),
+    inset -1px 0 0 rgba(15,76,76,.08) !important;
+}
+.hcd-num.tick {
+  transform: scale(1.12) translateY(-2px) !important;
+  box-shadow:
+    0 6px 18px rgba(15,76,76,.2),
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 -2px 0 rgba(15,76,76,.18) !important;
+}
+
+/* ── CTA BUTTONS: pressed metal ── */
+.btn-main {
+  box-shadow:
+    0 4px 18px rgba(212,130,26,.35),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 2px 0 #7a3f08 !important;
+  transition: transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s !important;
+}
+.btn-main:hover {
+  transform: translateY(-3px) !important;
+  box-shadow:
+    0 14px 40px rgba(212,130,26,.40),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 2px 0 #7a3f08 !important;
+}
+.btn-main:active {
+  transform: translateY(1px) !important;
+  box-shadow:
+    0 2px 8px rgba(212,130,26,.25),
+    inset 0 2px 4px rgba(0,0,0,.12),
+    0 1px 0 #7a3f08 !important;
+}
+
+/* ── WHO ITEMS: index-card depth ── */
+.who-item {
+  border-bottom: 2px solid rgba(0,0,0,.05);
+  transition: transform .32s cubic-bezier(.22,1,.36,1), border-color .3s, box-shadow .32s;
+}
+.who-item:hover {
+  transform: translateX(6px) perspective(600px) rotateY(-3deg) !important;
+  border-bottom-color: rgba(15,76,76,.08) !important;
+  box-shadow: 5px 4px 20px rgba(15,76,76,.10) !important;
+}
+
+/* ── FAQ: pages in a folder ── */
+.faq-item {
+  border-bottom: 2px solid rgba(0,0,0,.04);
+  transition: transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s, border-color .3s;
+}
+.faq-item.open {
+  transform: perspective(900px) rotateX(-0.4deg) scale(1.004) !important;
+  box-shadow: 0 10px 34px rgba(15,76,76,.09), 0 2px 6px rgba(0,0,0,.04) !important;
+}
+
+/* ── WEEK ITEMS: stacked pages ── */
+.week-item {
+  border-left: 3px solid transparent;
+  border-bottom: 2px solid rgba(0,0,0,.04);
+  transition: transform .32s cubic-bezier(.22,1,.36,1), border-color .3s, box-shadow .32s !important;
+}
+.week-item:hover {
+  transform: translateX(5px) perspective(600px) rotateY(-2deg) !important;
+  border-left-color: var(--teal) !important;
+  box-shadow: 5px 3px 18px rgba(15,76,76,.10) !important;
+}
+
+/* ── NAV: frosted glass plane with real top-edge highlight ── */
+nav {
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 8px 24px rgba(0,0,0,.06),
+    0 1px 3px rgba(0,0,0,.04) !important;
+}
+
+/* ── NAV LOGO: small 3D cube feel ── */
+.nav-logo-icon {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    inset 0 -2px 0 rgba(0,0,0,.18),
+    2px 4px 10px rgba(15,76,76,.25);
+  transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s;
+}
+.nav-logo-icon:hover {
+  transform: perspective(160px) rotateY(-20deg) rotateX(10deg);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -2px 0 rgba(0,0,0,.22),
+    5px 8px 20px rgba(15,76,76,.30);
+}
+
+/* ── HERO H1: ink on paper — layered letterpress ── */
+.hero-h1 {
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.6),
+    0 2px 4px rgba(15,76,76,.06),
+    0 6px 18px rgba(15,76,76,.06) !important;
+}
+.hero-h1 .amber {
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.4),
+    0 2px 8px rgba(212,130,26,.18),
+    0 8px 24px rgba(212,130,26,.12) !important;
+}
+
+/* ── SECTION TRANSITIONS: each section is its own plane ── */
+.why-us {
+  position: relative;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.12), 0 8px 32px rgba(0,0,0,.10) !important;
+}
+.certificate-section {
+  box-shadow: 0 -6px 24px rgba(0,0,0,.10), 0 6px 24px rgba(0,0,0,.08) !important;
+}
+
+/* ── MOUSE-DRIVEN CARD TILT (handled in JS below) ── */
+.course-card, .why-card, .benefit-card, .testi-card {
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════ */
 </style>
 </head>
 <body>
@@ -818,47 +1952,47 @@ nav { animation: navSlide 0.5s cubic-bezier(.22,1,.36,1) both; }
 </div>
 
 <!-- BENEFITS -->
-<!-- WHY US -->
+<!-- WHY US + WHAT'S INCLUDED (merged) -->
 <section class="why-us" id="why-us">
   <div class="why-us-bg-orb orb1"></div>
   <div class="why-us-bg-orb orb2"></div>
   <div class="why-us-inner">
     <div class="why-us-header reveal">
       <div class="why-us-eyebrow">Why IISPPR Academy</div>
-      <h2 class="why-us-h2">Not just another course.<br/><em>A real research credential.</em></h2>
-      <p class="why-us-sub">Hundreds of programs promise learning. We deliver something rarer — live mentorship, real fieldwork, and a fellowship certificate that opens doors in academia and policy alike.</p>
+      <h2 class="why-us-h2">Not just a course.<br/><em>Everything you need to launch your research career.</em></h2>
+      <p class="why-us-sub">Live PhD mentorship, real fieldwork, a globally oriented certificate — and a price that doesn't punish ambition. Here's what makes this fellowship different.</p>
     </div>
 
     <div class="why-us-grid" id="why-cards">
       <div class="why-card">
-        <div class="why-card-icon">🎓</div>
-        <div class="why-card-title">PhD-Led Live Mentorship</div>
-        <div class="why-card-desc">Every session is led by PhD scholars and practising field experts — not pre-recorded videos or junior TAs. You get direct access to minds shaping real research.</div>
+        <div class="why-card-icon">🎯</div>
+        <div class="why-card-title">Live PhD-Led Sessions</div>
+        <div class="why-card-desc">4 sessions per week with PhD scholars and field experts. Personalised feedback in a cohort of just 20 — not lost in a crowd of thousands.</div>
       </div>
       <div class="why-card">
-        <div class="why-card-icon">🌏</div>
-        <div class="why-card-title">Truly Global Community</div>
-        <div class="why-card-desc">Fellows from 15+ countries in every cohort. Build a research network that spans continents — your batchmates today become your collaborators tomorrow.</div>
+        <div class="why-card-icon">🔬</div>
+        <div class="why-card-title">Hands-On Fieldwork</div>
+        <div class="why-card-desc">Conduct real qualitative research in your own community — interview schedules, pilot studies, ethnographic and case-study methods. No travel required.</div>
       </div>
       <div class="why-card">
         <div class="why-card-icon">📂</div>
-        <div class="why-card-title">Portfolio You Can Show</div>
-        <div class="why-card-desc">Graduate with a real research portfolio — field notes, a written report, and optionally a co-authored book chapter. Not just a certificate: proof of ability.</div>
+        <div class="why-card-title">Portfolio + Certificate</div>
+        <div class="why-card-desc">Graduate with field notes, a written report, and a globally oriented fellowship certificate. Not just a participation badge — proof of actual ability.</div>
       </div>
       <div class="why-card">
-        <div class="why-card-icon">💸</div>
-        <div class="why-card-title">Genuinely Accessible Pricing</div>
-        <div class="why-card-desc">₹100 enrollment. ₹1,000 convocation fee at completion. No hidden charges, no EMI traps. World-class research training without the world-class price tag.</div>
+        <div class="why-card-icon">📖</div>
+        <div class="why-card-title">Book Chapter Opportunity</div>
+        <div class="why-card-desc">Top fellows co-author a published book chapter — a rare academic credential that sets you apart in any application for higher studies or research roles.</div>
       </div>
       <div class="why-card">
         <div class="why-card-icon">⏱️</div>
-        <div class="why-card-title">Designed for Busy Lives</div>
-        <div class="why-card-desc">Evening classes at 6 PM, 4 days a week, with reserve days built in for assignments. Working professionals and students complete it alongside their daily commitments.</div>
+        <div class="why-card-title">Built for Busy Lives</div>
+        <div class="why-card-desc">Evening classes at 6 PM, 4 days a week. Recordings available for 15 days. Reserve days built in for assignments. Finish without quitting your job or studies.</div>
       </div>
       <div class="why-card">
-        <div class="why-card-icon">🔒</div>
-        <div class="why-card-title">Small Cohort, Real Attention</div>
-        <div class="why-card-desc">Maximum 20 seats per batch — by design. Your questions get answered, your work gets reviewed, and your progress gets tracked. No one falls through the cracks.</div>
+        <div class="why-card-icon">💸</div>
+        <div class="why-card-title">₹1,100. Total. No Tricks.</div>
+        <div class="why-card-desc">₹100 enrollment + ₹1,000 convocation fee at the end. No EMI traps, no hidden charges. World-class research training at a fraction of what others charge.</div>
       </div>
     </div>
 
@@ -901,46 +2035,6 @@ nav { animation: navSlide 0.5s cubic-bezier(.22,1,.36,1) both; }
           <div class="why-vs-cell them-val">₹5,000–₹50,000+</div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="benefits" id="benefits">
-  <div class="reveal">
-    <div class="section-eyebrow">What's Included</div>
-    <h2 class="section-h2">Everything you need to<br/><em>launch your research career</em></h2>
-    <p class="section-intro">This isn't just another online course. It's a research-intensive fellowship that merges academic theory with real-world practice — giving your resume a credential that truly stands out.</p>
-  </div>
-  <div class="benefits-grid">
-    <div class="benefit-card reveal">
-      <div class="benefit-icon-wrap">🎯</div>
-      <div class="benefit-title">Live Mentored Sessions</div>
-      <div class="benefit-desc">4 sessions per week with PhD scholars and field research experts. Get personalised feedback in a cohort of just 20 — not lost in a crowd of thousands.</div>
-    </div>
-    <div class="benefit-card reveal">
-      <div class="benefit-icon-wrap">🔬</div>
-      <div class="benefit-title">Hands-On Fieldwork</div>
-      <div class="benefit-desc">Conduct real qualitative research in your own community. You'll design interview schedules, run pilot studies, and apply ethnographic and case-study methods.</div>
-    </div>
-    <div class="benefit-card reveal">
-      <div class="benefit-icon-wrap">📜</div>
-      <div class="benefit-title">Fellowship Certificate</div>
-      <div class="benefit-desc">Earn a globally-oriented fellowship certificate from IISPPR upon successful completion — a credential that adds serious weight to your academic or professional profile.</div>
-    </div>
-    <div class="benefit-card reveal">
-      <div class="benefit-icon-wrap">📖</div>
-      <div class="benefit-title">Book Chapter Publication</div>
-      <div class="benefit-desc">Top fellows get the opportunity to co-author a book chapter — a rare academic credential that sets you apart from peers and strengthens your research portfolio considerably.</div>
-    </div>
-    <div class="benefit-card reveal">
-      <div class="benefit-icon-wrap">🎥</div>
-      <div class="benefit-title">Session Recordings</div>
-      <div class="benefit-desc">All class recordings are available for 15 days after each session, so you never miss content and can revisit complex topics at your own pace.</div>
-    </div>
-    <div class="benefit-card reveal">
-      <div class="benefit-icon-wrap">🤝</div>
-      <div class="benefit-title">Global Research Network</div>
-      <div class="benefit-desc">Connect with a growing community of researchers, policy analysts, and academics across India and internationally — your cohort becomes your network for life.</div>
     </div>
   </div>
 </section>
@@ -1140,73 +2234,6 @@ nav { animation: navSlide 0.5s cubic-bezier(.22,1,.36,1) both; }
       <div class="testi-author">
         <div class="testi-avatar">M</div>
         <div><div class="testi-name">Mohammed Al-Rashid</div><div class="testi-role">SDG Policy Fellow · Nigeria 🇳🇬</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHO FOR -->
-<section class="who-for" id="who">
-  <div class="reveal">
-    <div class="section-eyebrow">Is This For You?</div>
-    <h2 class="section-h2">Built for <em>ambitious</em> learners<br/>and working professionals.</h2>
-  </div>
-  <div class="who-layout">
-    <div class="who-list reveal">
-      <div class="who-item">
-        <div class="who-item-icon">🎓</div>
-        <div>
-          <div class="who-item-title">Undergraduate &amp; Postgraduate Students</div>
-          <div class="who-item-desc">Add a credible research fellowship to your CV before entering the job market or applying for higher studies abroad.</div>
-        </div>
-      </div>
-      <div class="who-item">
-        <div class="who-item-icon">💼</div>
-        <div>
-          <div class="who-item-title">Working Professionals</div>
-          <div class="who-item-desc">Evening sessions and weekend flexibility mean you don't have to sacrifice your job to upskill in research and policy.</div>
-        </div>
-      </div>
-      <div class="who-item">
-        <div class="who-item-icon">🔍</div>
-        <div>
-          <div class="who-item-title">Aspiring Researchers &amp; Policy Analysts</div>
-          <div class="who-item-desc">Learn qualitative methods, fieldwork, and policy translation from PhD scholars with real-world experience.</div>
-        </div>
-      </div>
-      <div class="who-item">
-        <div class="who-item-icon">🌍</div>
-        <div>
-          <div class="who-item-title">International Applicants</div>
-          <div class="who-item-desc">Fully online format with fellows from 15+ countries. Join from anywhere in the world — no location barrier.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="reveal">
-      <div class="quick-facts">
-        <div class="section-eyebrow" style="margin-bottom:1.5rem">Quick Facts</div>
-        <div class="fact-row"><span class="fact-key">Program Duration</span><span class="fact-val">2 Months</span></div>
-        <div class="fact-row"><span class="fact-key">Sessions per Week</span><span class="fact-val">4 live classes</span></div>
-        <div class="fact-row"><span class="fact-key">Class Timing</span><span class="fact-val">6:00 PM</span></div>
-        <div class="fact-row"><span class="fact-key">Enrollment Fee</span><span class="fact-val" style="color:var(--success)">₹100 only</span></div>
-        <div class="fact-row"><span class="fact-key">Convocation Fee</span><span class="fact-val">₹1,000 (Month 2)</span></div>
-        <div class="fact-row"><span class="fact-key">Cohort Size</span><span class="fact-val" style="color:var(--amber)">Max 20 seats</span></div>
-        <div class="fact-row"><span class="fact-key">Recording Access</span><span class="fact-val">15 days post-class</span></div>
-        <div class="fact-row"><span class="fact-key">On Completion</span><span class="fact-val" style="color:var(--teal)">Certificate + Portfolio</span></div>
-      </div>
-
-      <div style="margin-top:1.5rem;background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
-        <div style="font-size:0.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">This may not be for you if…</div>
-        <div style="font-size:0.82rem;color:var(--muted);padding:0.3rem 0;display:flex;align-items:center;gap:0.5rem;">
-          <span style="color:#e88">✕</span> You need a fully self-paced, pre-recorded course
-        </div>
-        <div style="font-size:0.82rem;color:var(--muted);padding:0.3rem 0;display:flex;align-items:center;gap:0.5rem;">
-          <span style="color:#e88">✕</span> You want a degree-level qualification
-        </div>
-        <div style="font-size:0.82rem;color:var(--muted);padding:0.3rem 0;display:flex;align-items:center;gap:0.5rem;">
-          <span style="color:#e88">✕</span> You can't commit 4 evenings per week for 2 months
-        </div>
       </div>
     </div>
   </div>
@@ -1506,6 +2533,710 @@ const factsIo = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 const quickFacts = document.querySelector('.quick-facts');
 if (quickFacts) factsIo.observe(quickFacts);
+
+/* ═══════════════════════════════════════
+   COOL 3D JS — mouse tilt on cards
+   ═══════════════════════════════════════ */
+(function() {
+  // Generic tilt: tracks mouse, resets on leave
+  function tilt(el, maxRot, maxZ, resetTransform) {
+    el.addEventListener('mousemove', function(e) {
+      var r  = el.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width  - 0.5;
+      var py = (e.clientY - r.top)  / r.height - 0.5;
+      el.style.transition = 'transform .07s linear, box-shadow .07s linear';
+      el.style.transform  = 'perspective(900px) rotateY('+( px*maxRot*2)+'deg) rotateX('+(-py*maxRot*1.3)+'deg) translateZ('+maxZ+'px) translateY(-6px)';
+    });
+    el.addEventListener('mouseleave', function() {
+      el.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1), box-shadow .55s, border-color .3s';
+      el.style.transform  = resetTransform || '';
+    });
+  }
+
+  // Hero card — full live tilt with dynamic shadow
+  var card = document.querySelector('.course-card');
+  var wrap = document.querySelector('.hero-card-wrap');
+  if (card && wrap) {
+    // keep the original float animation running
+    wrap.addEventListener('mousemove', function(e) {
+      var r  = wrap.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width  - 0.5;
+      var py = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transition = 'transform .07s linear, box-shadow .07s linear';
+      card.style.transform  = 'perspective(1000px) rotateY('+(px*28)+'deg) rotateX('+(-py*18)+'deg) translateZ(40px)';
+      card.style.animationPlayState = 'paused';
+      card.style.boxShadow =
+        (-px*44)+'px '+((-py*28)+40)+'px 100px rgba(15,76,76,.28),' +
+        (-px*14)+'px '+((-py*10)+14)+'px 30px rgba(0,0,0,.13),' +
+        'inset 0 1px 0 rgba(255,255,255,.5)';
+    });
+    wrap.addEventListener('mouseleave', function() {
+      card.style.transition   = 'transform .6s cubic-bezier(.22,1,.36,1), box-shadow .6s';
+      card.style.transform    = 'perspective(1000px) rotateY(-12deg) rotateX(6deg) translateZ(0)';
+      card.style.boxShadow    = '';
+      card.style.animationPlayState = 'running';
+    });
+  }
+
+  // Why-us cards
+  document.querySelectorAll('.why-card').forEach(function(c) {
+    tilt(c, 10, 24);
+    c.addEventListener('mousemove', function() {
+      var ico = c.querySelector('.why-card-icon');
+      if (ico) ico.style.transform = 'scale(1.2) rotate(-6deg) translateZ(22px)';
+    });
+    c.addEventListener('mouseleave', function() {
+      var ico = c.querySelector('.why-card-icon');
+      if (ico) ico.style.transform = '';
+    });
+  });
+
+  // Benefit cards
+  document.querySelectorAll('.benefit-card').forEach(function(c) {
+    tilt(c, 8, 18);
+    c.addEventListener('mousemove', function() {
+      var ico = c.querySelector('.benefit-icon-wrap');
+      if (ico) ico.style.transform = 'scale(1.14) rotate(-5deg) translateZ(20px)';
+    });
+    c.addEventListener('mouseleave', function() {
+      var ico = c.querySelector('.benefit-icon-wrap');
+      if (ico) ico.style.transform = '';
+    });
+  });
+
+  // Testimonial cards
+  document.querySelectorAll('.testi-card').forEach(function(c) { tilt(c, 6, 14); });
+
+  // Parallax: hero blob only (safe — absolutely positioned element)
+  var blob = document.querySelector('.hero-blob');
+  window.addEventListener('scroll', function() {
+    if (blob) blob.style.transform = 'translateY('+(window.scrollY*.28)+'px)';
+  }, { passive:true });
+
+})();
+/* ═══════════════════════════════════════ */
+
+/* ──────────────────────────────────────
+   EXTRA COOL JS
+   ────────────────────────────────────── */
+(function() {
+
+  /* 1. FLOATING PARTICLE CANVAS in hero */
+  var heroSection = document.querySelector('.hero');
+  if (heroSection) {
+    var canvas = document.createElement('canvas');
+    canvas.id = 'hero-canvas';
+    heroSection.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+    var pts = [];
+    var NUM = 55;
+    function resize() {
+      canvas.width  = heroSection.offsetWidth;
+      canvas.height = heroSection.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive:true });
+    for (var i=0; i<NUM; i++) {
+      pts.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + .8,
+        dx: (Math.random()-.5) * .45,
+        dy: (Math.random()-.5) * .45,
+        o: Math.random() * .5 + .15
+      });
+    }
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // lines between close pts
+      for (var a=0; a<pts.length; a++) {
+        for (var b=a+1; b<pts.length; b++) {
+          var dx = pts[a].x - pts[b].x;
+          var dy = pts[a].y - pts[b].y;
+          var dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(15,76,76,'+((.12)*(1-dist/120))+')';
+            ctx.lineWidth = .6;
+            ctx.moveTo(pts[a].x, pts[a].y);
+            ctx.lineTo(pts[b].x, pts[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+      pts.forEach(function(p) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(15,76,76,'+p.o+')';
+        ctx.fill();
+        p.x += p.dx; p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+  }
+
+  /* 2. CURSOR SPOTLIGHT */
+  var spot = document.createElement('div');
+  spot.id = 'spotlight';
+  document.body.appendChild(spot);
+  document.addEventListener('mousemove', function(e) {
+    spot.style.left = e.clientX + 'px';
+    spot.style.top  = e.clientY + 'px';
+  });
+
+  /* 3. RIPPLE on every CTA button */
+  function addRipple(el) {
+    el.addEventListener('click', function(e) {
+      var r   = el.getBoundingClientRect();
+      var size = Math.max(r.width, r.height) * 1.4;
+      var rip = document.createElement('span');
+      rip.className = 'ripple-wave';
+      rip.style.width  = size + 'px';
+      rip.style.height = size + 'px';
+      rip.style.left   = (e.clientX - r.left - size/2) + 'px';
+      rip.style.top    = (e.clientY - r.top  - size/2) + 'px';
+      el.appendChild(rip);
+      setTimeout(function() { rip.remove(); }, 600);
+    });
+  }
+  document.querySelectorAll('.btn-main,.card-enroll-btn,.btn-amber,.nav-enroll,.banner-cta').forEach(addRipple);
+
+  /* 4. MAGNETIC pull on primary CTA buttons */
+  function makeMagnetic(el) {
+    el.addEventListener('mousemove', function(e) {
+      var r  = el.getBoundingClientRect();
+      var cx = r.left + r.width  / 2;
+      var cy = r.top  + r.height / 2;
+      var dx = (e.clientX - cx) * .28;
+      var dy = (e.clientY - cy) * .28;
+      el.style.transform = 'translate('+dx+'px,'+dy+'px) translateY(-4px)';
+      el.style.transition = 'transform .12s ease';
+    });
+    el.addEventListener('mouseleave', function() {
+      el.style.transform = '';
+      el.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1), box-shadow .25s';
+    });
+  }
+  document.querySelectorAll('.btn-main').forEach(makeMagnetic);
+
+  /* 5. SCROLL-LINKED depth: sections tilt in from below */
+  var depthTargets = document.querySelectorAll('.why-us-header, .benefits > div:first-child, .cert-layout > div:first-child, .testimonials > div:first-child, .final-cta > div');
+  var depthObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        el.style.transition = 'transform 1s cubic-bezier(.22,1,.36,1), opacity 1s';
+        el.style.transform = '';
+        el.style.opacity = '';
+        depthObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.08 });
+  depthTargets.forEach(function(el) {
+    el.style.transform = 'perspective(1200px) rotateX(4deg) translateY(16px)';
+    el.style.opacity = '0.5';
+    depthObserver.observe(el);
+  });
+
+  /* 6. PROOF BAR: particles burst on hover */
+  document.querySelectorAll('.proof-item').forEach(function(item) {
+    item.addEventListener('mouseenter', function() {
+      for (var i=0; i<6; i++) {
+        var spark = document.createElement('span');
+        spark.style.cssText = [
+          'position:absolute',
+          'width:4px','height:4px','border-radius:50%',
+          'background:rgba(245,166,35,.8)',
+          'pointer-events:none',
+          'left:50%','top:50%',
+          'transform:translate(-50%,-50%)',
+          'animation:sparkFly .6s forwards',
+          '--tx:'+(Math.random()*60-30)+'px',
+          '--ty:'+(Math.random()*60-30)+'px',
+        ].join(';');
+        item.style.position = 'relative';
+        item.appendChild(spark);
+        setTimeout(function(s){ s.remove(); }, 700, spark);
+      }
+    });
+  });
+
+  /* sparkFly keyframe injected once */
+  if (!document.getElementById('spark-style')) {
+    var ss = document.createElement('style');
+    ss.id = 'spark-style';
+    ss.textContent = '@keyframes sparkFly{ to{ transform:translate(var(--tx),var(--ty)) scale(0); opacity:0; } }';
+    document.head.appendChild(ss);
+  }
+
+  /* 7. CARD STAGGER DELAY: why-cards get increasing 3d stagger */
+  document.querySelectorAll('.why-card').forEach(function(c, i) {
+    c.style.animationDelay = (i * 80) + 'ms';
+  });
+  document.querySelectorAll('.benefit-card').forEach(function(c, i) {
+    c.style.animationDelay = (i * 70) + 'ms';
+  });
+
+})();
+/* ── END EXTRA COOL JS ── */
+
+/* ════════════════════════════════════════════
+   SITE-WIDE COOL JS v2
+   ════════════════════════════════════════════ */
+(function() {
+
+  /* 1. SCROLL PROGRESS BAR */
+  var bar = document.createElement('div');
+  bar.id = 'scroll-progress';
+  document.body.prepend(bar);
+  window.addEventListener('scroll', function() {
+    var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  /* 2. FLOATING DOTS in certificate section */
+  var certSec = document.querySelector('.certificate-section');
+  if (certSec) {
+    for (var i = 0; i < 14; i++) {
+      var dot = document.createElement('div');
+      dot.className = 'cert-dot';
+      var size = Math.random() * 14 + 5;
+      dot.style.cssText = [
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'left:' + (Math.random() * 100) + '%',
+        'bottom:' + (-size) + 'px',
+        'animation-duration:' + (Math.random() * 12 + 8) + 's',
+        'animation-delay:' + (Math.random() * 8) + 's',
+      ].join(';');
+      certSec.appendChild(dot);
+    }
+  }
+
+  /* 3. FOOTER LINKS — letter-by-letter hover */
+  document.querySelectorAll('.footer-links a').forEach(function(link) {
+    var text = link.textContent;
+    link.innerHTML = text.split('').map(function(ch) {
+      return '<span style="display:inline-block;transition:transform .2s,color .2s">' + (ch === ' ' ? '&nbsp;' : ch) + '</span>';
+    }).join('');
+    link.addEventListener('mouseenter', function() {
+      link.querySelectorAll('span').forEach(function(s, i) {
+        setTimeout(function() {
+          s.style.transform = 'translateY(-3px)';
+          s.style.color = '#fff';
+        }, i * 22);
+      });
+    });
+    link.addEventListener('mouseleave', function() {
+      link.querySelectorAll('span').forEach(function(s) {
+        s.style.transform = '';
+        s.style.color = '';
+      });
+    });
+  });
+
+  /* 4. TESTI STARS — animate in on hover */
+  document.querySelectorAll('.testi-stars').forEach(function(stars) {
+    var orig = stars.textContent;
+    stars.addEventListener('mouseenter', function() {
+      stars.style.letterSpacing = '4px';
+      stars.style.color = '#f5a623';
+      stars.style.textShadow = '0 0 10px rgba(245,166,35,.7)';
+    });
+    stars.addEventListener('mouseleave', function() {
+      stars.style.letterSpacing = '';
+      stars.style.textShadow = '';
+    });
+  });
+
+  /* 5. BENEFIT CARD icon — wiggle on reveal */
+  var benefitRevealIo = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var icons = entry.target.querySelectorAll('.benefit-icon-wrap');
+        icons.forEach(function(ico, i) {
+          setTimeout(function() {
+            ico.style.animation = 'iconWiggle .5s cubic-bezier(.22,1,.36,1)';
+            setTimeout(function() { ico.style.animation = ''; }, 600);
+          }, i * 120);
+        });
+        benefitRevealIo.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  var bGrid = document.querySelector('.benefits-grid');
+  if (bGrid) benefitRevealIo.observe(bGrid);
+
+  var wiggleStyle = document.createElement('style');
+  wiggleStyle.textContent = '@keyframes iconWiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-12deg) scale(1.15)} 75%{transform:rotate(8deg) scale(1.1)} }';
+  document.head.appendChild(wiggleStyle);
+
+  /* 6. NAV LINKS — underline slide */
+  document.querySelectorAll('.nav-link').forEach(function(link) {
+    link.style.position = 'relative';
+    var ul = document.createElement('span');
+    ul.style.cssText = 'position:absolute;bottom:-2px;left:0;height:2px;width:0;background:var(--teal);transition:width .28s cubic-bezier(.22,1,.36,1);border-radius:2px';
+    link.appendChild(ul);
+    link.addEventListener('mouseenter', function() { ul.style.width = '100%'; });
+    link.addEventListener('mouseleave', function() { ul.style.width = '0'; });
+  });
+
+  /* 7. SECTION HEADINGS — word-by-word reveal */
+  document.querySelectorAll('.section-h2, .why-us-h2, .cert-h2').forEach(function(h) {
+    if (h.dataset.animated) return;
+    h.dataset.animated = '1';
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var words = h.innerHTML.split(/(\s+|<br\/>|<br>)/);
+        h.innerHTML = words.map(function(w) {
+          if (/^\s+$/.test(w) || w.startsWith('<br')) return w;
+          return '<span style="display:inline-block;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s">' + w + '</span>';
+        }).join('');
+        h.querySelectorAll('span').forEach(function(s, i) {
+          setTimeout(function() {
+            s.style.opacity = '1';
+            s.style.transform = 'translateY(0)';
+          }, i * 55);
+        });
+        io.unobserve(h);
+      });
+    }, { threshold: 0.4 });
+    io.observe(h);
+  });
+
+  /* 8. PROOF BAR — number glow pulse on load */
+  setTimeout(function() {
+    document.querySelectorAll('.proof-num').forEach(function(n, i) {
+      setTimeout(function() {
+        n.style.transition = 'text-shadow .4s';
+        n.style.textShadow = '0 0 20px rgba(245,166,35,.9)';
+        setTimeout(function() { n.style.textShadow = ''; }, 600);
+      }, i * 150);
+    });
+  }, 1200);
+
+})();
+/* ════════════════════════════════════════════ */
+
+/* ╔══════════════════════════════════════════╗
+   ║   COOL JS v3 — ENTIRE SITE              ║
+   ╚══════════════════════════════════════════╝ */
+(function() {
+
+  /* 1. CUSTOM CURSOR */
+  var dot  = document.createElement('div'); dot.id  = 'cursor-dot';
+  var ring = document.createElement('div'); ring.id = 'cursor-ring';
+  document.body.appendChild(dot);
+  document.body.appendChild(ring);
+  var mx = -100, my = -100, rx = -100, ry = -100;
+  document.addEventListener('mousemove', function(e) { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    dot.style.left  = mx + 'px'; dot.style.top  = my + 'px';
+    rx += (mx - rx) * .12;  ry += (my - ry) * .12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+  document.addEventListener('mousedown',  function() { dot.style.transform  = 'translate(-50%,-50%) scale(.6)'; });
+  document.addEventListener('mouseup',    function() { dot.style.transform  = 'translate(-50%,-50%) scale(1)'; });
+
+  /* 2. GLITCH DATA-TEXT on section eyebrows */
+  document.querySelectorAll('.section-eyebrow, .why-us-eyebrow').forEach(function(el) {
+    el.setAttribute('data-text', el.textContent);
+  });
+
+  /* 3. TYPING EFFECT on hero subtitle */
+  var heroSub = document.querySelector('.hero-sub');
+  if (heroSub) {
+    var fullText = heroSub.textContent;
+    heroSub.textContent = '';
+    heroSub.style.opacity = '1';
+    heroSub.style.borderRight = '2px solid var(--teal)';
+    heroSub.style.animation = 'none';
+    var idx = 0;
+    function typeChar() {
+      if (idx < fullText.length) {
+        heroSub.textContent += fullText[idx++];
+        setTimeout(typeChar, idx < 5 ? 60 : 18);
+      } else {
+        setTimeout(function() {
+          heroSub.style.borderRight = 'none';
+        }, 800);
+      }
+    }
+    setTimeout(typeChar, 900);
+  }
+
+  /* 4. COUNTER NUMBERS: live count-up on proof bar with easing */
+  var proofDone = false;
+  var proofBar2 = document.querySelector('.proof-bar');
+  if (proofBar2) {
+    new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting && !proofDone) {
+        proofDone = true;
+        document.querySelectorAll('.proof-num').forEach(function(el) {
+          var raw    = el.textContent.trim();
+          var prefix = raw.match(/^[^\d]*/)[0];
+          var suffix = raw.match(/[^\d.]*$/)[0];
+          var num    = parseFloat(raw.replace(/[^\d.]/g,''));
+          if (isNaN(num)) return;
+          var isFloat = raw.includes('.');
+          var start   = performance.now();
+          var dur     = 1600;
+          (function tick(now) {
+            var p   = Math.min((now - start) / dur, 1);
+            var ease = 1 - Math.pow(1-p, 4);
+            var val  = num * ease;
+            el.textContent = prefix + (isFloat ? val.toFixed(1) : Math.round(val)) + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+          })(start);
+        });
+      }
+    }, { threshold: .5 }).observe(proofBar2);
+  }
+
+  /* 5. MOUSE TRAIL sparks */
+  var lastTrail = 0;
+  document.addEventListener('mousemove', function(e) {
+    var now = Date.now();
+    if (now - lastTrail < 55) return;
+    lastTrail = now;
+    var spark = document.createElement('div');
+    spark.style.cssText =
+      'position:fixed;pointer-events:none;z-index:9990;' +
+      'left:'+e.clientX+'px;top:'+e.clientY+'px;' +
+      'width:5px;height:5px;border-radius:50%;' +
+      'background:rgba(212,130,26,'+(Math.random()*.5+.2)+');' +
+      'transform:translate(-50%,-50%);' +
+      'transition:transform .6s ease,opacity .6s ease;';
+    document.body.appendChild(spark);
+    requestAnimationFrame(function() {
+      var tx = (Math.random()-0.5)*40;
+      var ty = (Math.random()-0.5)*40 - 20;
+      spark.style.transform = 'translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0)';
+      spark.style.opacity = '0';
+    });
+    setTimeout(function() { spark.remove(); }, 650);
+  });
+
+  /* 6. STAGGERED REVEAL for who-items */
+  var whoIo2 = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.querySelectorAll('.who-item').forEach(function(item, i) {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-24px) rotateY(-8deg)';
+        item.style.transition = 'opacity .55s '+i*.1+'s cubic-bezier(.22,1,.36,1), transform .55s '+i*.1+'s cubic-bezier(.22,1,.36,1)';
+        requestAnimationFrame(function() { requestAnimationFrame(function() {
+          item.style.opacity = '1';
+          item.style.transform = '';
+        }); });
+      });
+      whoIo2.unobserve(entry.target);
+    });
+  }, { threshold: .1 });
+  var whoList2 = document.querySelector('.who-list');
+  if (whoList2) whoIo2.observe(whoList2);
+
+  /* 7. FAQ: smooth animated open/close */
+  document.querySelectorAll('.faq-q').forEach(function(q) {
+    q.addEventListener('click', function() {
+      var item = q.parentElement;
+      var ans  = item.querySelector('.faq-a');
+      if (!ans) return;
+      if (item.classList.contains('open')) {
+        ans.style.maxHeight = ans.scrollHeight + 'px';
+        requestAnimationFrame(function() {
+          ans.style.transition = 'max-height .4s cubic-bezier(.22,1,.36,1), opacity .3s';
+          ans.style.maxHeight  = '0';
+          ans.style.opacity    = '0';
+        });
+      } else {
+        ans.style.maxHeight = '0';
+        ans.style.opacity   = '0';
+        ans.style.display   = 'block';
+        requestAnimationFrame(function() {
+          ans.style.transition = 'max-height .5s cubic-bezier(.22,1,.36,1), opacity .4s';
+          ans.style.maxHeight  = ans.scrollHeight + 'px';
+          ans.style.opacity    = '1';
+        });
+      }
+    });
+  });
+
+  /* 8. CARD ENTRANCE: why-cards fly in with 3-axis spin */
+  var whyRevIo = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.querySelectorAll('.why-card').forEach(function(card, i) {
+        card.style.opacity   = '0';
+        card.style.transform = 'perspective(800px) rotateX(22deg) rotateY(-12deg) translateY(40px) scale(.92)';
+        setTimeout(function() {
+          card.style.transition = 'opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1)';
+          card.style.opacity    = '1';
+          card.style.transform  = '';
+        }, i * 90);
+      });
+      whyRevIo.unobserve(entry.target);
+    });
+  }, { threshold: .08 });
+  var wGrid = document.querySelector('#why-cards');
+  if (wGrid) whyRevIo.observe(wGrid);
+
+  /* 9. SECTION NUMBER BADGES on proof items */
+  document.querySelectorAll('.proof-item').forEach(function(item, i) {
+    item.addEventListener('mouseenter', function() {
+      item.style.filter = 'brightness(1.15)';
+    });
+    item.addEventListener('mouseleave', function() {
+      item.style.filter = '';
+    });
+  });
+
+  /* 10. SCROLL-SNAP feeling: nav link highlight based on visible section */
+  var sections = document.querySelectorAll('section[id], div[id]');
+  var navLinks = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY + 120;
+    var current = '';
+    sections.forEach(function(s) {
+      if (s.offsetTop <= scrollY) current = s.id;
+    });
+    navLinks.forEach(function(link) {
+      var href = link.getAttribute('href').slice(1);
+      link.style.color = href === current ? 'var(--teal)' : '';
+      link.style.fontWeight = href === current ? '700' : '';
+    });
+  }, { passive: true });
+
+  /* 11. CURSOR RING: color shift per section */
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    var total = document.body.scrollHeight - window.innerHeight;
+    var pct = y / total;
+    var r = Math.round(15  + pct * 197);
+    var g = Math.round(76  + pct * 30);
+    var b = Math.round(76  - pct * 20);
+    ring.style.borderColor = 'rgba('+r+','+g+','+b+',.5)';
+  }, { passive: true });
+
+})();
+/* ╚══════════════════════════════════════════╝ */
+</script>
+<!-- DEPTH JS: mouse tilt with real physics, nothing theatrical -->
+<script>
+(function() {
+  'use strict';
+
+  /* Generic tilt — tracks mouse position over element,
+     applies a proportional perspective rotation.
+     Snaps back smoothly on leave. */
+  function applyTilt(el, opts) {
+    var maxX  = opts.maxX  || 8;   // deg rotateX
+    var maxY  = opts.maxY  || 12;  // deg rotateY
+    var lift  = opts.lift  || 0;   // px translateZ
+    var reset = opts.reset || '';
+    var dur   = opts.dur   || '.07s';
+
+    el.addEventListener('mousemove', function(e) {
+      var r  = el.getBoundingClientRect();
+      var px = (e.clientX - r.left)  / r.width  - 0.5; // -0.5 to 0.5
+      var py = (e.clientY - r.top)   / r.height - 0.5;
+      el.style.transition = 'transform ' + dur + ' linear, box-shadow ' + dur + ' linear';
+      el.style.transform  =
+        'perspective(900px)' +
+        ' rotateY('  + (px * maxY * 2) + 'deg)' +
+        ' rotateX('  + (-py * maxX * 1.5) + 'deg)' +
+        (lift ? ' translateZ(' + lift + 'px)' : '') +
+        ' translateY(-5px)';
+    });
+
+    el.addEventListener('mouseleave', function() {
+      el.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1), box-shadow .55s, border-color .3s';
+      el.style.transform  = reset;
+    });
+  }
+
+  /* Hero card — slide-in handled by CSS animation, hover lift by CSS */
+
+  /* Why-us cards */
+  document.querySelectorAll('.why-card').forEach(function(c) {
+    applyTilt(c, { maxX: 7, maxY: 10, lift: 20 });
+    c.addEventListener('mousemove', function(e) {
+      var r = c.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5;
+      var py = (e.clientY - r.top) / r.height - 0.5;
+      /* Icon shifts in the opposite direction — parallax inside card */
+      var ico = c.querySelector('.why-card-icon');
+      if (ico) {
+        ico.style.transform = 'translate(' + (-px * 8) + 'px,' + (-py * 6) + 'px) scale(1.08)';
+        ico.style.transition = 'transform .07s linear';
+      }
+    });
+    c.addEventListener('mouseleave', function() {
+      var ico = c.querySelector('.why-card-icon');
+      if (ico) {
+        ico.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1)';
+        ico.style.transform  = '';
+      }
+    });
+  });
+
+  /* Benefit cards */
+  document.querySelectorAll('.benefit-card').forEach(function(c) {
+    applyTilt(c, { maxX: 5, maxY: 8, lift: 14 });
+    c.addEventListener('mousemove', function(e) {
+      var r = c.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5;
+      var py = (e.clientY - r.top) / r.height - 0.5;
+      var ico = c.querySelector('.benefit-icon-wrap');
+      if (ico) {
+        ico.style.transform = 'translate(' + (-px * 6) + 'px,' + (-py * 5) + 'px) scale(1.06)';
+        ico.style.transition = 'transform .07s linear';
+      }
+    });
+    c.addEventListener('mouseleave', function() {
+      var ico = c.querySelector('.benefit-icon-wrap');
+      if (ico) {
+        ico.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1)';
+        ico.style.transform  = '';
+      }
+    });
+  });
+
+  /* Testimonial cards — staggered fade-up entrance */
+  var testiIo = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      Array.from(entry.target.querySelectorAll('.testi-card')).forEach(function(card, i) {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(28px)';
+        card.style.transition =
+          'opacity .6s ' + (i * 0.12) + 's cubic-bezier(.22,1,.36,1),' +
+          'transform .6s ' + (i * 0.12) + 's cubic-bezier(.22,1,.36,1)';
+        requestAnimationFrame(function() { requestAnimationFrame(function() {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }); });
+      });
+      testiIo.unobserve(entry.target);
+    });
+  }, { threshold: 0.1 });
+  var testiGrid = document.querySelector('.testi-grid');
+  if (testiGrid) testiIo.observe(testiGrid);
+
+  /* Certificate mock — slide-in handled by CSS animation, hover lift by CSS */
+
+  /* Hero blob parallax on scroll */
+  var blob = document.querySelector('.hero-blob');
+  window.addEventListener('scroll', function() {
+    if (blob) blob.style.transform = 'translateY(' + (window.scrollY * .26) + 'px)';
+  }, { passive: true });
+
+})();
 </script>
 </body>
 </html>
