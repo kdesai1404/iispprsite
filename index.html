@@ -1828,6 +1828,150 @@ nav {
   will-change: transform;
 }
 
+/* ── BIG HERO COUNTDOWN ── */
+.hero-countdown-big {
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: slideIn 0.7s 0.6s forwards;
+}
+.hcb-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.hcb-units {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+.hcb-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hcb-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 800;
+  color: var(--teal);
+  line-height: 1;
+  min-width: 2ch;
+  text-align: center;
+  /* Letterpress depth — two shadows: highlight top, ink bottom */
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.8),
+    0 2px 0 rgba(15,76,76,0.12),
+    0 4px 14px rgba(15,76,76,0.10);
+  transition: transform 0.18s cubic-bezier(.22,1,.36,1), color 0.18s;
+}
+.hcb-num.tick {
+  transform: translateY(-3px);
+  color: var(--teal-mid);
+}
+.hcb-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.hcb-sep {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: var(--teal);
+  opacity: 0.2;
+  line-height: 1;
+  padding: 0 0.15rem;
+  margin-top: 0.05rem;
+}
+.hcb-meta {
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
+/* ── SCROLL DEPTH: section planes cast shadows on each other ── */
+.proof-bar {
+  position: relative;
+  z-index: 2;
+}
+.why-us {
+  position: relative;
+  z-index: 3;
+}
+.benefits {
+  position: relative;
+  z-index: 2;
+}
+.certificate-section {
+  position: relative;
+  z-index: 3;
+}
+
+/* ── PARALLAX DEPTH LINES: hair-thin rules that shift on scroll ── */
+.depth-rule {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+.depth-rule::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(15,76,76,.12) 20%,
+    rgba(212,130,26,.18) 50%,
+    rgba(15,76,76,.12) 80%,
+    transparent 100%);
+}
+
+/* ── WHY-CARD: bottom edge gives physical thickness ── */
+.why-card {
+  border-bottom: 3px solid rgba(0,0,0,.20);
+  border-right: 1px solid rgba(0,0,0,.08);
+}
+
+/* ── BENEFIT CARD: same physical presence ── */
+.benefit-card {
+  border-bottom: 2px solid rgba(0,0,0,.06);
+  border-right: 1px solid rgba(0,0,0,.04);
+}
+
+/* ── WEEK ITEMS: left-edge accent that grows in ── */
+.week-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
+}
+.week-item:hover::before,
+.week-item.open::before {
+  transform: scaleY(1);
+}
+
+/* ── PROOF BAR NUMBERS: glow on hover ── */
+.proof-item:hover .proof-num {
+  text-shadow: 0 0 16px rgba(245,166,35,.7), 0 0 32px rgba(245,166,35,.3);
+}
+
 /* ═══════════════════════════════════════════ */
 </style>
 </head>
@@ -1887,18 +2031,30 @@ nav {
       <div class="hero-check"><div class="check-icon">✓</div> 1-on-1 mentorship from PhD scholars &amp; field experts</div>
       <div class="hero-check"><div class="check-icon">✓</div> Opportunity to co-author a published book chapter</div>
     </div>
-    <div class="hero-countdown">
-      <div class="hcd-label">⏳ Cohort starts in</div>
-      <div class="hcd-units">
-        <div class="hcd-unit"><span class="hcd-num" id="h-days">21</span><div class="hcd-lbl">Days</div></div>
-        <div class="hcd-sep">:</div>
-        <div class="hcd-unit"><span class="hcd-num" id="h-hours">00</span><div class="hcd-lbl">Hrs</div></div>
-        <div class="hcd-sep">:</div>
-        <div class="hcd-unit"><span class="hcd-num" id="h-mins">00</span><div class="hcd-lbl">Min</div></div>
-        <div class="hcd-sep">:</div>
-        <div class="hcd-unit"><span class="hcd-num" id="h-secs">00</span><div class="hcd-lbl">Sec</div></div>
+    <div class="hero-countdown-big">
+      <div class="hcb-label">Next cohort closes in</div>
+      <div class="hcb-units">
+        <div class="hcb-unit">
+          <div class="hcb-num" id="h-days">21</div>
+          <div class="hcb-lbl">Days</div>
+        </div>
+        <div class="hcb-sep">:</div>
+        <div class="hcb-unit">
+          <div class="hcb-num" id="h-hours">00</div>
+          <div class="hcb-lbl">Hours</div>
+        </div>
+        <div class="hcb-sep">:</div>
+        <div class="hcb-unit">
+          <div class="hcb-num" id="h-mins">00</div>
+          <div class="hcb-lbl">Minutes</div>
+        </div>
+        <div class="hcb-sep">:</div>
+        <div class="hcb-unit">
+          <div class="hcb-num" id="h-secs">00</div>
+          <div class="hcb-lbl">Seconds</div>
+        </div>
       </div>
-      <div class="hcd-date">June 9, 2026</div>
+      <div class="hcb-meta">June 9, 2026 · 6:00 PM IST · 20 seats only</div>
     </div>
     <div class="hero-ctas">
       <a href="#apply" class="btn-main">Secure Your Seat →</a>
